@@ -8,7 +8,7 @@ var ListenTo = require('./listento');
 module.exports = CloakRoomManager;
 
 function CloakRoomManager() {
-  ListenTo.apply(this, this._listeningNames);
+  ListenTo.call(this, this._listeningNames);
 
   this.roomNameToId = {};
   this.roomIdToName = {};
