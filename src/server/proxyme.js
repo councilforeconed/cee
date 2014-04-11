@@ -21,3 +21,9 @@ ProxyMe.prototype.emit = function() {
   starArgs.unshift('*');
   this._emit.apply(this, starArgs);
 };
+
+ProxyMe.mixin = function(Cls) {
+  Cls.prototype._emit = Cls.prototype.emit;
+  Cls.prototype.emit = ProxyMe.prototype.emit;
+  return Cls;
+};
