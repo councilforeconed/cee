@@ -32,6 +32,12 @@ suite('ListenTo', function() {
     handlers.somethingHappened();
     assert.ok(instance.doSomething.calledOnce);
     assert.equal(instance.doSomething.thisValues[0], instance);
+
+    handlers = ListenTo.bindNames(instance, ['doSomething']);
+
+    handlers.doSomething();
+    assert.ok(instance.doSomething.calledTwice);
+    assert.equal(instance.doSomething.thisValues[1], instance);
   });
 
   test('listenTo', function() {
