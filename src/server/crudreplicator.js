@@ -5,7 +5,7 @@
 
 'use strict';
 
-var ProxyMe = require('./proxyme');
+var ProxyFromEmitter = require('./proxyfromemitter');
 
 module.exports = CRUDReplicator;
 
@@ -35,7 +35,7 @@ CRUDReplicator.prototype._handler = function(method) {
 CRUDReplicator.EndPoint = CRUDReplicatorEndPoint;
 
 function CRUDReplicatorEndPoint(options) {
-  ProxyMe.call(this);
+  ProxyFromEmitter.call(this);
 
   this.emitter = options.emitter;
   this.type = options.type;
@@ -52,5 +52,5 @@ function CRUDReplicatorEndPoint(options) {
   }.bind(this));
 }
 
-CRUDReplicatorEndPoint.prototype = Object.create(ProxyMe.prototype);
+CRUDReplicatorEndPoint.prototype = Object.create(ProxyFromEmitter.prototype);
 CRUDReplicatorEndPoint.prototype.constructor = CRUDReplicatorEndPoint;
