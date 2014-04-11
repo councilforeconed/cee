@@ -1,14 +1,28 @@
 'use strict';
 
+// Node core modules
 var EventEmitter = require('events').EventEmitter;
 
+// Third party modules
 var _ = require('lodash');
 
+// Locally defined modules
 var ProxyFromEmitter = require('./proxyfromemitter');
 
+// @export ListenTo
 module.exports = ListenTo;
 
-// Concrete class for listening to a proxy-able emitter.
+// Superclass for easily listening to a ProxyFromEmitter.
+//
+// ProxyFromEmitters have a special '*' event that listening to, A ListenTo
+// subclass can hear proxied events off an internal emitter. This lets ListenTo
+// bind all methods in the subclass to the internal emitter ahead of time. Once
+// #listenTo is called on a target emitter it will have one binding to that
+// emitter on the special event. This lets ListenTo subclasses easily and
+// quickly connect and disconnect from their target emitters.
+//
+// @param listenerNames an array of names of events and local methods to bind to
+//    or an object mapping events to local methods.
 function ListenTo(listenerNames) {
   ProxyFromEmitter.call(this);
 
@@ -23,9 +37,17 @@ function ListenTo(listenerNames) {
   }
 }
 
+// @inherits {ProxyFromEmitter}
 ListenTo.prototype = Object.create(ProxyFromEmitter.prototype);
 ListenTo.prototype.constructor = ListenTo;
 
+// Listen to a ProxyFromEmitter.
+//
+// Only one target is allowed at a time. If an instance is still listening to
+// another emitter, it will stop listening, and then start listening to the new
+// one.
+//
+// @param {ProxyFromEmitter} emitter
 ListenTo.prototype.listenTo = function(emitter) {
   this.stopListening();
 
@@ -40,12 +62,18 @@ ListenTo.prototype.listenTo = function(emitter) {
   this._listeningTo.on('*', this._listeningHandler);
 };
 
+// Stop listening to the old emitter.
 ListenTo.prototype.stopListening = function() {
   if (this._listeningTo) {
     this._listeningTo.removeListener('*', this._listeningHandler);
   }
 };
 
+// Convenience function for binding arrays of event/method names or object
+// mappings of events to methods.
+//
+// @param ctx an object to find methods on and bind to
+// @param names an array or object mapping events and methods.
 ListenTo.bindNames = function(ctx, names) {
   if (Array.isArray(names)) {
     var result = {};
