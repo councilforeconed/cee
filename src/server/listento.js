@@ -4,13 +4,13 @@ var EventEmitter = require('events').EventEmitter;
 
 var _ = require('lodash');
 
-var ProxyMe = require('./proxyme');
+var ProxyFromEmitter = require('./proxyfromemitter');
 
 module.exports = ListenTo;
 
-// Abstract class for listening to an emitter.
+// Concrete class for listening to a proxy-able emitter.
 function ListenTo(listenerNames) {
-  ProxyMe.call(this);
+  ProxyFromEmitter.call(this);
 
   this._listeningTo = null;
   this._listeningEmitter = new EventEmitter();
@@ -23,7 +23,7 @@ function ListenTo(listenerNames) {
   }
 }
 
-ListenTo.prototype = Object.create(ProxyMe.prototype);
+ListenTo.prototype = Object.create(ProxyFromEmitter.prototype);
 ListenTo.prototype.constructor = ListenTo;
 
 ListenTo.prototype.listenTo = function(emitter) {

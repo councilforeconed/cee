@@ -4,7 +4,7 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 
 var ListenTo = require('../../src/server/listento');
-var ProxyMe = require('../../src/server/proxyme');
+var ProxyFromEmitter = require('../../src/server/proxyfromemitter');
 
 suite('ListenTo', function() {
   var Cls;
@@ -22,7 +22,7 @@ suite('ListenTo', function() {
 
     events = { 'somethingHappened': 'doSomething' };
 
-    emitter = new ProxyMe();
+    emitter = new ProxyFromEmitter();
     instance = new Cls();
   });
 
