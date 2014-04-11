@@ -4,65 +4,58 @@ var EventEmitter = require('events').EventEmitter;
 
 var _ = require('lodash');
 
+var ProxyMe = require('./proxyme');
+
 module.exports = ListenTo;
 
 // Abstract class for listening to an emitter.
-function ListenTo() {
-  EventEmitter.apply(this, arguments);
+function ListenTo(listenerNames) {
+  ProxyMe.call(this);
+
   this._listeningTo = null;
+  this._listeningEmitter = new EventEmitter();
+  this._listeningHandler = null;
+
+  if (listenerNames) {
+    _.each(ListenTo.bindNames(this, listenerNames), function(handle, event) {
+      this._listeningEmitter.on(event, handle);
+    }, this);
+  }
 }
 
-ListenTo.prototype = Object.create(EventEmitter.prototype);
+ListenTo.prototype = Object.create(ProxyMe.prototype);
 ListenTo.prototype.constructor = ListenTo;
-
-// Given an object return an object with the values replaced with
-// bound methods of this.
-ListenTo.prototype._bindNames = function(names) {
-  return _.mapValues(names, function(value) {
-    return this[value].bind(this);
-  }, this);
-};
-
-// @abstract
-ListenTo.prototype._handlers = function() {};
-
-// @abstract
-ListenTo.prototype._stopCleanup = function() {};
 
 ListenTo.prototype.listenTo = function(emitter) {
   this.stopListening();
 
+  if (!this._listeningHandler) {
+    this._listeningHandler =
+      this._listeningEmitter.emit.call.bind(
+        this._listeningEmitter.emit,
+        this._listeningEmitter
+      );
+  }
   this._listeningTo = emitter;
-  var handlers = this._handlers();
-  _.each(
-    _.pairs(handlers),
-    emitter.on.apply.bind(emitter.on, emitter)
-  );
+  this._listeningTo.on('*', this._listeningHandler);
 };
 
 ListenTo.prototype.stopListening = function() {
-  var emitter = this._listeningTo;
-  if (!emitter) {
-    return;
-  }
-
-  var handlers = this._handlers();
-  _.each(
-    _.pairs(handlers),
-    emitter.removeListener.apply.bind(emitter.removeListener, emitter)
-  );
-
-  if (typeof this._stopCleanup === 'function') {
-    this._stopCleanup();
+  if (this._listeningTo) {
+    this._listeningTo.removeListener('*', this._listeningHandler);
   }
 };
 
 ListenTo.bindNames = function(ctx, names) {
-  return ListenTo.prototype._bindNames.call(ctx, names);
-};
-
-ListenTo.mixin = function(cls) {
-  cls.prototype.listenTo = ListenTo.prototype.listenTo;
-  cls.prototype.stopListening = ListenTo.prototype.stopListening;
-  return cls;
+  if (Array.isArray(names)) {
+    var result = {};
+    _.each(names, function(value) {
+      result[value] = ctx[value].bind(ctx);
+    }, ctx);
+    return result;
+  } else {
+    return _.mapValues(names, function(value) {
+      return ctx[value].bind(ctx);
+    }, ctx);
+  }
 };

@@ -1,11 +1,10 @@
 'use strict';
 
-var EventEmitter = require('events').EventEmitter;
-
 var assert = require('chai').assert;
 var sinon = require('sinon');
 
 var ListenTo = require('../../src/server/listento');
+var ProxyMe = require('../../src/server/proxyme');
 
 suite('ListenTo', function() {
   var Cls;
@@ -14,24 +13,21 @@ suite('ListenTo', function() {
   var instance;
 
   setup(function() {
-    Cls = function Cls() {};
-    ListenTo.mixin(Cls);
-    Cls.prototype._handlers = function() {
-      if (!this._boundHandlers) {
-        this._boundHandlers = ListenTo.bindNames(this, events);
-      }
-      return this._boundHandlers;
+    Cls = function Cls() {
+      ListenTo.call(this, events);
     };
+    Cls.prototype = Object.create(ListenTo.prototype);
+    Cls.prototype.constructor = Cls;
     Cls.prototype.doSomething = sinon.spy();
 
     events = { 'somethingHappened': 'doSomething' };
 
-    emitter = new EventEmitter();
+    emitter = new ProxyMe();
     instance = new Cls();
   });
 
   test('bindNames', function() {
-    var handlers = instance._handlers();
+    var handlers = ListenTo.bindNames(instance, events);
 
     handlers.somethingHappened();
     assert.ok(instance.doSomething.calledOnce);
