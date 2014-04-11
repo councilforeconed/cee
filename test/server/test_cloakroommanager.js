@@ -24,34 +24,34 @@ suite('CloakRoomManager', function() {
   });
 
   test('create room', function() {
-    emitter.emit('create', 'name', {});
+    cloakRoomManager.create('name', {});
     assert.isDefined(cloakRoomManager.byName('name'));
   });
 
   test('delete room', function() {
-    emitter.emit('create', 'name');
-    emitter.emit('delete', 'name');
+    cloakRoomManager.create('name');
+    cloakRoomManager.delete('name');
     assert.ok(fakeCloak.room.delete.calledOnce);
     assert.isUndefined(cloakRoomManager.byName('name'));
   });
 
   test('id', function() {
-    emitter.emit('create', 'name');
+    cloakRoomManager.create('name');
     var room = cloakRoomManager.byName('name');
     assert.equal(cloakRoomManager.getRoomId('name'), room.id);
     assert.equal(cloakRoomManager.byId(room.id), room);
   });
 
   test('name', function() {
-    emitter.emit('create', 'name');
+    cloakRoomManager.create('name');
     var room = cloakRoomManager.byName('name');
     assert.equal(cloakRoomManager.getRoomName(room.id), 'name');
   });
 
 
   test('cleanup', function() {
-    emitter.emit('create', 'name');
-    cloakRoomManager.stopListening();
+    cloakRoomManager.create('name');
+    cloakRoomManager.cleanup();
     assert.ok(fakeCloak.room.delete.calledOnce);
     assert.isUndefined(cloakRoomManager.byName('name'));
   });
