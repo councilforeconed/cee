@@ -8,10 +8,8 @@ var cloak = require('cloak');
 var socketio = require('../../../server/socketio.monkey');
 
 // Locally defined libs.
+var CloakRoomManager = require('../../../server/cloakroommanager');
 var common = require('../../../server/common');
-var CRUDManager = require('../../../server/crudmanager');
-var CRUDReplicator = require('../../../server/crudreplicator');
-var MemoryStore = require('../../../server/storememory');
 
 // The `shared/` directory is available for scripts that should be available on
 // both the client and the server. In order to consume AMD modules, server
@@ -39,21 +37,11 @@ module.exports.createServer = function(options, debug) {
 
   // Setup room and group managers that will mirror the contents set by the
   // top server.
-  var roomManager = new CRUDManager({ name: 'room', store: new MemoryStore() });
-  var groupManager = new CRUDManager({
-    name: 'group',
-    store: new MemoryStore()
-  });
-  roomManager.listenTo(new CRUDReplicator.EndPoint({
-    emitter: process,
-    type: 'room'
-  }));
-  groupManager.listenTo(new CRUDReplicator.EndPoint({
-    emitter: process,
-    type: 'group'
-  }));
+  common.createListeningCRUDManager('room');
+  var groupManager = common.createListeningCRUDManager('group');
 
-  var roomNameToId = {};
+  var cloakRoomManager = new CloakRoomManager();
+  cloakRoomManager.listenTo(groupManager);
 
   // Configure cloak. We'll start it later after server binds to a port.
   cloak.configure({
@@ -61,7 +49,7 @@ module.exports.createServer = function(options, debug) {
 
     messages: {
       'join-room': function(roomName, user) {
-        var room = cloak.getRoom(roomNameToId[roomName]);
+        var room = cloakRoomManager.byName(roomName);
         if (room) {
           room.addMember(user);
         }
@@ -71,17 +59,6 @@ module.exports.createServer = function(options, debug) {
         user.getRoom().messageMembers('chat', obj);
       }
     }
-  });
-
-  // Manage cloak rooms based off of group management instructed by
-  // top server.
-  groupManager.on('create', function(name) {
-    var room = cloak.createRoom(name);
-    roomNameToId[name] = room.id;
-  });
-  groupManager.on('delete', function(name) {
-    cloak.getRoom(name).delete();
-    delete roomNameToId[name];
   });
 
   return common.whenListening(server, debug)
