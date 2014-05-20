@@ -43,3 +43,36 @@
 
   cursor: pointer;
 }
+
+.modal .header {
+  background-color: rgb(242, 241, 241);
+  border-bottom: 1px solid rgb(213, 213, 213);
+  padding: 1rem 2rem;
+}
+
+.modal h1, .modal h2 {
+  font-weight: 300;
+}
+
+.modal .title {
+  margin: 0 0 0.8rem 0;
+}
+
+.modal .header p {
+  font-style: italic;
+}
+
+.modal .body {
+  padding: 1rem 2rem;
+}
+
+.modal .body h2 {
+  margin-top: 0;
+}
+
+.modal .footer {
+  background-color: rgb(242, 241, 241);
+  border-top: 1px solid rgb(213, 213, 213);
+  padding: 1rem 2rem;
+  text-align: right;
+}
