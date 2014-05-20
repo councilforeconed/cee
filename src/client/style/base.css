@@ -34,6 +34,8 @@ a { text-decoration: none; }
 
 li { list-style: none; }
 
+strong { font-weight: 400; }
+
 .left { float: left; }
 .right { float: right; }
 
@@ -98,4 +100,13 @@ button.button.button-secondary:hover {
 
 button.button.button-secondary:active {
   background-color: #EEE;
+}
+
+/* Form Elements */
+
+input {
+  padding: 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 3px;
+  border: 1px solid #CCC;
 }
