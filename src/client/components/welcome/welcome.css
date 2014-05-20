@@ -1,50 +1,37 @@
+.welcome {
+  font-size: 0.9rem;
+}
+
+.welcome .header {
+  background-color: rgb(242, 241, 241);
+  border-bottom: 1px solid rgb(213, 213, 213);
+  padding: 1rem 2rem;
+}
+
+.welcome h1, .welcome h2 {
+  font-weight: 300;
+}
+
 .welcome .title {
-  margin: 0 0 1.4rem 0;
+  margin: 0 0 0.8rem 0;
 }
 
-.welcome .tabs {
-  margin: 0;
-  padding: 0;
-
-  list-style-type: none;
+.welcome .header p {
+  font-style: italic;
 }
 
-.welcome .tab {
-  display: inline;
-  padding: 1rem 2rem 0;
-  margin: 0 2rem;
+.welcome .body {
+  padding: 1rem 2rem;
 }
 
-.welcome .tab {
-  border-color: #444;
-  border-width: 1px 1px 0 1px;
-  border-style: solid;
-  cursor: pointer;
+.welcome .body h2 {
+  margin-top: 0;
 }
 
-.welcome .tab.active, .welcome .tab-container.active {
-  background-color: #fff;
+.welcome .footer {
+  background-color: rgb(242, 241, 241);
+  border-top: 1px solid rgb(213, 213, 213);
+  padding: 1rem 2rem;
+  text-align: right;
 }
 
-.welcome .tab-containers {
-  margin: 0;
-  padding: 0;
-
-  list-style-type: none;
-}
-
-.welcome .tab-container {
-  display: none;
-  padding: 1rem;
-}
-
-.welcome .tab-container.active {
-  display: block;
-}
-
-.welcome .begin {
-  display: block;
-  margin: 0.3rem auto;
-
-  cursor: pointer;
-}
