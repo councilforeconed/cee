@@ -2,36 +2,3 @@
   font-size: 0.9rem;
 }
 
-.welcome .header {
-  background-color: rgb(242, 241, 241);
-  border-bottom: 1px solid rgb(213, 213, 213);
-  padding: 1rem 2rem;
-}
-
-.welcome h1, .welcome h2 {
-  font-weight: 300;
-}
-
-.welcome .title {
-  margin: 0 0 0.8rem 0;
-}
-
-.welcome .header p {
-  font-style: italic;
-}
-
-.welcome .body {
-  padding: 1rem 2rem;
-}
-
-.welcome .body h2 {
-  margin-top: 0;
-}
-
-.welcome .footer {
-  background-color: rgb(242, 241, 241);
-  border-top: 1px solid rgb(213, 213, 213);
-  padding: 1rem 2rem;
-  text-align: right;
-}
-
