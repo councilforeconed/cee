@@ -39,6 +39,38 @@
   box-shadow: 0 0 10px #666;
 }
 
+/*
+  Adapt the set the max-height of the modal depending on the window height.
+  This is a work around for the fact that you can't use percentages with
+  aboslutely positioned elements. If anyone has a better solution, I'd love
+  to hear it. (REMOVE_COMMENT 2014-07-07)
+*/
+
+
+@media screen and (min-height: 500px) {
+  .modal .surface {
+    max-height: 400px;
+  }
+}
+
+@media screen and (min-height: 600px) {
+  .modal .surface {
+    max-height: 500px;
+  }
+}
+
+@media screen and (min-height: 700px) {
+  .modal .surface {
+    max-height: 600px;
+  }
+}
+
+@media screen and (min-height: 800px) {
+  .modal .surface {
+    max-height: 700px;
+  }
+}
+
 .modal .dismiss {
   position: absolute;
   top: 0;
@@ -78,28 +110,4 @@
   border-top: 1px solid rgb(213, 213, 213);
   padding: 1rem 2rem;
   text-align: right;
-}
-
-@media screen and (min-height: 500px) {
-  .modal .surface {
-    max-height: 400px;
-  }
-}
-
-@media screen and (min-height: 600px) {
-  .modal .surface {
-    max-height: 500px;
-  }
-}
-
-@media screen and (min-height: 700px) {
-  .modal .surface {
-    max-height: 600px;
-  }
-}
-
-@media screen and (min-height: 800px) {
-  .modal .surface {
-    max-height: 700px;
-  }
 }
