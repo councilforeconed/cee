@@ -34,6 +34,20 @@ a { text-decoration: none; }
 
 li { list-style: none; }
 
+strong { font-weight: 400; }
+
+input {
+  border-radius: 3px;
+  border: 1px solid #CCC;
+  margin-right: 1rem;
+  padding: 0.8rem;
+  font-size: 0.8rem;
+}
+
+input:last-child {
+  margin-right: 0;
+}
+
 .left { float: left; }
 .right { float: right; }
 
